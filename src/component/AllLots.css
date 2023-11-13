@@ -1,0 +1,25 @@
+.ProdPhoto{
+   width: 100%;
+   /* min-width: 220px; */
+   height: 220px;
+ }
+ 
+ .MyProd{
+   transition: 0.3s ease-in;
+   height:380px;
+   min-width: 220px;
+   max-width:250px;
+ }
+ .MyProd:hover{
+   box-shadow: 0 0 10px gray;
+   transform: scale(1.1);
+ }
+ .OneLine{
+   white-space:nowrap;
+   overflow-x:hidden;
+   text-overflow:ellipsis;
+  }
+
+  .footer{
+   font-size: smaller;
+  }
