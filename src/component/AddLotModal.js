@@ -1,10 +1,9 @@
 import axios from 'axios';
-import React, { useEffect } from 'react'
+import React from 'react'
 import Modal from 'react-bootstrap/Modal';
-import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form'; 
 
-function AllLotModal({modalOpen, setModalOpen}) {
+function AddLotModal({modalOpen, setModalOpen}) {
    console.log(modalOpen);
   const handleClose = () => setModalOpen(false);
   let {
@@ -14,7 +13,6 @@ function AllLotModal({modalOpen, setModalOpen}) {
     reset
   } = useForm();
 
-  let navigate= useNavigate();
 
   let addLot = (LotDetails) =>{
     console.log(LotDetails);
@@ -26,16 +24,13 @@ function AllLotModal({modalOpen, setModalOpen}) {
          LotDetails, 
          config
       );
-      setModalOpen(false);
       reset();
+      setModalOpen(false);
     }
 
     postLot();
   }
 
-  useEffect(()=>{
-      if(!modalOpen) navigate("/");
-  },[navigate, modalOpen])
    return (
         <Modal show={modalOpen} onHide={handleClose}>
               <Modal.Body className="modal-body">
@@ -87,4 +82,4 @@ function AllLotModal({modalOpen, setModalOpen}) {
     );
 }
 
-export default AllLotModal
+export default AddLotModal

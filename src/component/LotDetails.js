@@ -7,32 +7,37 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
+import AddBidModal from './AddBidModal';
 
 const LotDetails = () => {
   const currentPage = window.location.href;
   const lot_id= (currentPage.split("lot/"))[1];
 
-  let user = useOutletContext();
-
+  let {user} = useOutletContext();
   let [Lot, setLot] = useState({});
   let [customer, setCustomer] = useState({});
+  let [modalOpen, setModalOpen] = useState(false);
+  let [isAuthenticated, setAuth] = useState(false);
 
+  const defaultBid= 'd-flex card flex-row my-1 bg-light m-auto';
+  const UserBid= 'd-flex card flex-row my-2 bg-warning m-auto';
  useEffect(() => {
     // make http get request
     // write side-effect only in use effect
+    if(user._id) setAuth(true);
     async function getLot() {
-      const {data} = await axios.get(`http://localhost:4000/api/v1/lot/${lot_id}`);
+      const {data} = await axios.get(`/api/v1/lot/${lot_id}`);
       if(data.lot){
         console.log(data);
         console.log(data.lot);
         setLot(data.lot);
 
-            let cust = await axios.get(`/api/v1/customer/${data.lot.user}`);
-            setCustomer(cust.data.user);
+        let cust = await axios.get(`/api/v1/customer/${data.lot.user}`);
+        setCustomer(cust.data.user);
       }
     }
     getLot();
-   },[lot_id, Lot.user, user] );
+   },[lot_id,user, Lot.user, modalOpen, isAuthenticated] );
 
   return (
     <div>
@@ -69,8 +74,11 @@ const LotDetails = () => {
                     </Card.Text>
                     {
                       user.role==="farmer" &&
-                      <div className='d-flex flex-row justify-content-around'>
-                        <Button variant="success">Make Bid</Button>
+                      <div>
+                        <div className='d-flex flex-row justify-content-around'>
+                          <Button variant="success" onClick={()=>setModalOpen(true)}>Make Bid</Button>
+                          <AddBidModal isAuthenticated={isAuthenticated} modalOpen={modalOpen} setModalOpen={setModalOpen} lotId={lot_id}/>
+                        </div>
                       </div>
                     }
                   </Card.Body>
@@ -88,21 +96,22 @@ const LotDetails = () => {
             </div>
           </Col>
           
-          <hr className='my-5'/>
+          <hr className='mt-5'/>
           {
             Lot.numOfBids>0 ?
               <div>
-                <div className='display-6 text-center my-5'>
+                <div className='display-6 text-center mb-5'>
                   Current Bids: {Lot.numOfBids}
                 </div>
-                <div className='row w-50 m-auto'>
+                <div className='row w-50 m-auto user-select-none mb-4'>
                 {
                   Lot.bids.map(bid=>
-                    <div className='d-flex card flex-row m-1 bg-light m-auto'  key={bid._id}>
-                      <div className='d-flex justify-content-between flex-row p-1 rounded w-75 '>
-                        <div>name:  {bid.name} </div>
-                        <div>price: {bid.price} </div>
-                        <div>location: {bid.location}  </div>
+                    <div className={bid.user === user._id? UserBid: defaultBid}  key={bid._id} 
+                      title={user.role==="customer"?(`phone Number: ${bid.phoneNumber}`):""}>
+                      <div className='row rounded w-100 p-2'>
+                        <div className='col'>Name:  {bid.name} </div>
+                        <div className='col-3'>Price: {bid.price} </div>
+                        <div className='col'>Location: {bid.location}  </div>
                       </div>
                     </div>
                   )

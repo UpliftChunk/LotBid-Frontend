@@ -1,18 +1,13 @@
 import {Nav,Navbar} from 'react-bootstrap';
-import {Link, useNavigate} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import Dropdown from 'react-bootstrap/Dropdown';
 import {AiOutlineUser} from 'react-icons/ai';
 import ProfilePng from '../../images/Profile.png';
 import axios from 'axios';
-import { useEffect } from 'react';
 
 function RootNavbar({isAuthenticated, user, setAuth}) {
-  let navigate= useNavigate();
-  // const currentPage = window.location.href;
 
   const LogoutUser = () => {
-    // dispatch(logout());
-    // alert.success(`Logout successful`);
     async function removeUser() {
         await axios.get(`/api/v1/logout`);
       
@@ -26,9 +21,8 @@ function RootNavbar({isAuthenticated, user, setAuth}) {
       console.log(isAuthenticated);
       removeUser();
   }
-  useEffect(() => {
-    navigate('/');
-  }, [navigate, isAuthenticated])
+
+  
   
   return (
     <Navbar bg="dark" variant="dark">

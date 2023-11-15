@@ -6,8 +6,11 @@ const LoginRegister = () => {
    let {isAuthenticated, setAuth} = useOutletContext();
    let currentPage = window.location.href;
    const [active, setActive] = useState("");
+   const [message, setMessage] = useState(null);
    useEffect(()=>{
-      const redirect = "/user/account"; 
+      const redirect = "/"; 
+      if(currentPage.includes("?message"))
+         setMessage((currentPage.split("?message:"))[1]); 
 
       if(isAuthenticated){
          return navigate(redirect);
@@ -36,6 +39,12 @@ const LoginRegister = () => {
             Register
          </Link>
       </div>
+      {
+         message && 
+         <div className='display-6 fw-bold text-center text-decoration-underline mt-3 text-danger'>
+            {message}
+         </div>
+      }
       <div className='container-fluid' style={{minHeight:"60vh"}}>
          <div className='d-flex flex-column'>
             <Outlet context={{isAuthenticated, setAuth}}/>

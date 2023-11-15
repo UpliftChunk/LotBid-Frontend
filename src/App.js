@@ -7,8 +7,6 @@ import LotDetails from './component/LotDetails';
 import LoginRegister from './component/user/auth/LoginRegister';
 import Login from './component/user/auth/Login';
 import Register from './component/user/auth/Register';
-import UserAccount from './component/user/auth/UserAccount';
-import UserValidity from './component/user/auth/UserValidity';
 
 function App() {
   const Router = createBrowserRouter([
@@ -39,16 +37,6 @@ function App() {
             {
               path : 'register',
               element : <Register/> 
-            }
-          ]
-        },
-        {
-          path : 'user',
-          element : <UserValidity/>,
-          children:[
-            {
-              path : 'account',
-              element : <UserAccount/>
             }
           ]
         }
