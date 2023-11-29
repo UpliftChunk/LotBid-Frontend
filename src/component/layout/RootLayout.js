@@ -8,14 +8,13 @@ function RootLayout() {
    let [user, setUser] = useState({role: 'farmer'});
    let [loading, setLoading] = useState(true);
    useEffect( () => {
-    console.log(localStorage.getItem('user'));
+    // console.log(localStorage.getItem('user'));
     if(localStorage.getItem('user')) {
       setUser(JSON.parse(localStorage.getItem('user')));
       setAuth(true);
       setLoading(false);
     }
     else {
-      console.log("here");
       setUser({role: 'farmer'});
       setLoading(false);
     }

@@ -3,6 +3,7 @@ import {Navigate} from 'react-router-dom';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import RootLayout from './component/layout/RootLayout';
 import AllLots from './component/AllLots';
+import Requests from './component/Requests.js';
 import LotDetails from './component/LotDetails';
 import LoginRegister from './component/user/auth/LoginRegister';
 import Login from './component/user/auth/Login';
@@ -25,6 +26,10 @@ function App() {
         {
           path : 'lot/:id',
           element : <LotDetails/>
+        },
+        {
+          path : 'requests',
+          element : <Requests/>
         },
         {
           path : 'account',

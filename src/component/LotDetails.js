@@ -45,10 +45,13 @@ const LotDetails = () => {
         customer &&
         <Row className='mt-4 border m-auto' style={{width:'70%'}}>
           {/* profile photo */}
-          <Col xs={4} className='d-flex'>
+          <Col xs={4} className='d-flex' >
+            <div style={{height:"200px", width:"200px", marginLeft: "auto"}}>
               <img src= {(customer.avatar)?(customer.avatar.url):ProfilePng}
-                  alt="profile_img" style={{height:'230px', objectFit:'cover'}}
-                  className='rounded-circle ms-auto border border-dark'/>
+                  alt="profile_img" style={{height:'100%', width:"100%", objectFit:'cover'}}
+                  className='rounded-circle border border-dark'
+                  />
+            </div>
           </Col>
   
           {/* customer description */}

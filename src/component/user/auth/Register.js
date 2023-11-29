@@ -1,6 +1,7 @@
-import React, {useEffect, useState} from 'react'
+import axios from 'axios';
+import React, {useEffect} from 'react'
 import {useForm} from 'react-hook-form';
-import {useNavigate } from 'react-router-dom';
+import {useNavigate, useOutletContext } from 'react-router-dom';
 
 const labelStyle = "text-end border-bottom border-dark w-100 mb-1";
 const inputStyle = "form-control  border-top-0  border-dark";
@@ -8,8 +9,7 @@ const inputStyle = "form-control  border-top-0  border-dark";
 const Register = () => {
    // navigate hook
    let navigate= useNavigate();
-   // user form hook
-   const [isAuthenticated, setIsAuthenticated] = useState(false)
+   let {isAuthenticated, setAuth} = useOutletContext();
    let {
       register,
       handleSubmit,
@@ -18,15 +18,32 @@ const Register = () => {
   
 
    let addNewUser = (newUser) => {
-      newUser.avatar = newUser.avatar[0];
+      async function postUser() {
+         newUser.avatar =await newUser.avatar[0];
+         console.log(newUser);
+         
+         const config = {headers: {'Content-Type': 'multipart/form-data'}};
+         const {data} = await axios.post( 
+            `/api/v1/register`, 
+            newUser, 
+            config
+         );
 
-      setIsAuthenticated(true);
+         console.log(data);
+         if(data.user){
+            localStorage.setItem(`user`, JSON.stringify(data.user));
+            localStorage.setItem(`isAuthenticated`, JSON.stringify(true));
+            setAuth(true);
+         }  
+      }
+
+      postUser();
    }
 
    
    useEffect(()=>{
       if(isAuthenticated) 
-         navigate(`/user/account`);
+         navigate(`/`);
    }, [navigate, isAuthenticated]);
 
   return (
@@ -51,6 +68,46 @@ const Register = () => {
                            {/* validation errors for name */}
                         {errors.name?.type==="required" && 
                            <p className='text-danger'>*name is required</p>
+                        }
+                        </div>
+                        {/* location */}
+                        <div className="mb-3">
+                           <label className={labelStyle} htmlFor='location'>Location</label>
+                           
+                           <input type="text" id="location" className={inputStyle} 
+                              {...register("location", {required: true})}/>
+         
+                           {/* validation errors for location */}
+                        {errors.location?.type==="required" && 
+                           <p className='text-danger'>*location is required</p>
+                        }
+                        </div>
+                        {/* phoneNumber */}
+                        <div className="mb-3">
+                           <label className={labelStyle} htmlFor='phoneNumber'>Phone Number</label>
+                           
+                           <input type="number" id="phoneNumber" className={inputStyle} 
+                              {...register("phoneNumber", {required: true})}/>
+         
+                           {/* validation errors for phoneNumber */}
+                        {errors.phoneNumber?.type==="required" && 
+                           <p className='text-danger'>*Phone Number is required</p>
+                        }
+                        </div>
+                        {/* role */}
+                        <div className="mb-3">
+                           <label className={labelStyle} htmlFor='role'>Role</label>
+                           
+                           <select id="role" className="form-control" {...register("role", {required: true})} 
+                              defaultValue={"Choose"}>
+                              <option disabled>Choose...</option>
+                              <option>farmer</option>
+                              <option>customer</option>
+                           </select>
+         
+                           {/* validation errors for role */}
+                        {errors.role?.type==="required" && 
+                           <p className='text-danger'>*Role is required</p>
                         }
                         </div>
                         {/* email */}

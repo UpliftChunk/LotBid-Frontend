@@ -47,14 +47,16 @@ function AddBidModal({isAuthenticated, modalOpen, setModalOpen, lotId}) {
                   <form onSubmit={handleSubmit(addBid)}>
 
                       <label htmlFor="price">Price</label>
-                         <input type="number" className="form-control" id="price" placeholder="in rupees" {...register("price", {required: true})}/>
+                         <input type="number" className="form-control" id="price" placeholder="in rupees" 
+                         {...register("price", {required: true})}/>
 
                       {errors.price?.type==="required" && 
                               <p className='text-danger'>*price is required</p>
                       }
 
                       <label htmlFor="description">Description</label>
-                      <input type="text" className="form-control" id="description" placeholder="Describe your crop quality" {...register("description", {required: true})}/>
+                      <input type="text" className="form-control" id="description" placeholder="Describe your crop quality" 
+                        {...register("description", {required: true})}/>
                       {errors.description?.type==="required" && 
                               <p className='text-danger'>*description is required</p>
                       }
