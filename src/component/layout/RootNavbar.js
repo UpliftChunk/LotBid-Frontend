@@ -29,14 +29,22 @@ function RootNavbar({isAuthenticated, user, setAuth}) {
           <Nav className="navbarContainer w-100 d-flex">
             <Link className='nav-link fs-1 mb-2 active' to="" >Harvest Hack</Link>
 
-              <div className="d-flex border border-white flex-grow-1">
+              <div className="d-flex flex-grow-1">
               {/* User Option */}
               {isAuthenticated?(
-                    <div>
-                      <Link className='nav-link fs-5 mt-3' to="requests">
-                        Requests
+                    <div className='d-flex w-100'>
+                      {user.role==='farmer' && <>
+                        <Link className='nav-link fs-5 mt-4' to="friends">
+                          Friends
+                        </Link>
+                        <Link className='nav-link fs-5 mt-4' to="bids">
+                          Bids
+                        </Link></>
+                        }
+                      <Link className='nav-link fs-5 mt-4' to="deals">
+                        Deals
                       </Link>
-                      <div className='nav-link mt-2 ms-auto'>
+                      <div className='nav-link mx-3 mt-3 ms-auto'>
                         <Dropdown className='my-auto container-fluid'>
                           {/* dropdown tag*/}
                           <Dropdown.Toggle split variant="dark" className='mt-auto d-flex'>
@@ -44,7 +52,7 @@ function RootNavbar({isAuthenticated, user, setAuth}) {
                               <div className='pe-none lead'> @{user.name} </div>
                               {/* profile button */}
                               <span>
-                              {user.avatar !== undefined ?
+                              {user.avatar?.url?
                                   (<img src= {user.avatar.url}
                                       alt="profile_img" style={{width:"4vh", height:"4vh", objectFit:"cover"}}
                                       className='rounded-circle mb-1'/>)
@@ -70,9 +78,11 @@ function RootNavbar({isAuthenticated, user, setAuth}) {
                       </div>
                     </div>
                 ):(
-                  <Link className='nav-link fs-5 my-auto' to="account">
-                    Guest <AiOutlineUser className='fs-5'/>
-                  </Link>
+                  <div className='d-flex flex-grow-1 container'>
+                    <Link className='nav-link fs-5 ms-auto my-auto' to="account">
+                      Guest <AiOutlineUser className='fs-5'/>
+                    </Link>
+                  </div>
                 
                 )
               }

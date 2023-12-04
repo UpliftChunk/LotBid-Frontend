@@ -47,7 +47,7 @@ const LotDetails = () => {
           {/* profile photo */}
           <Col xs={4} className='d-flex' >
             <div style={{height:"200px", width:"200px", marginLeft: "auto"}}>
-              <img src= {(customer.avatar)?(customer.avatar.url):ProfilePng}
+              <img src= {customer.avatar?.url?(customer.avatar.url):ProfilePng}
                   alt="profile_img" style={{height:'100%', width:"100%", objectFit:'cover'}}
                   className='rounded-circle border border-dark'
                   />
