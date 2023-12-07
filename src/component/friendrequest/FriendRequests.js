@@ -51,7 +51,7 @@ const FriendRequests = () => {
         const {data} = await axios.get('/api/v1/me'); 
         if(data.user!== user){
           localStorage.setItem(`user`, JSON.stringify(data.user));
-          setUser(user);
+          setUser(data.user);
         }
 
         setLoading(false);

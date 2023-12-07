@@ -4,7 +4,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import RootLayout from './component/layout/RootLayout';
 import AllLots from './component/AllLots';
 import FriendRequests from './component/friendrequest/FriendRequests';
-import BidRequests from './component/BidRequests';
+import BidRequests from './component/bidrequest/BidRequests';
 import DealRequests from './component/DealRequests';
 import LotDetails from './component/LotDetails';
 import LoginRegister from './component/user/auth/LoginRegister';

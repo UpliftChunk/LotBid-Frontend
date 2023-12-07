@@ -19,11 +19,14 @@ function AddLotModal({modalOpen, setModalOpen}) {
     async function postLot() {
          
       const config = {headers: {'Content-Type': 'application/json'}};
-      await axios.post( 
+      const {data}= await axios.post( 
          `/api/v1/customer/lot/new`, 
          LotDetails, 
          config
       );
+      if(data.user)
+        localStorage.setItem(`user`, JSON.stringify(data.user));
+        
       reset();
       setModalOpen(false);
     }

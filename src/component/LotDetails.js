@@ -8,23 +8,23 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import AddBidModal from './AddBidModal';
+import AddDuoBidModal from './AddDuoBidModal';
 
 const LotDetails = () => {
   const currentPage = window.location.href;
   const lot_id= (currentPage.split("lot/"))[1];
 
-  let {user} = useOutletContext();
+  let {user, isAuthenticated} = useOutletContext();
   let [Lot, setLot] = useState({});
   let [customer, setCustomer] = useState({});
-  let [modalOpen, setModalOpen] = useState(false);
-  let [isAuthenticated, setAuth] = useState(false);
+  let [soloModalOpen, setSoloModalOpen] = useState(false);
+  let [duoModalOpen, setDuoModalOpen] = useState(false);
 
   const defaultBid= 'd-flex card flex-row my-1 bg-light m-auto';
   const UserBid= 'd-flex card flex-row my-2 bg-warning m-auto';
  useEffect(() => {
     // make http get request
     // write side-effect only in use effect
-    if(user._id) setAuth(true);
     async function getLot() {
       const {data} = await axios.get(`/api/v1/lot/${lot_id}`);
       if(data.lot){
@@ -37,7 +37,7 @@ const LotDetails = () => {
       }
     }
     getLot();
-   },[lot_id,user, Lot.user, modalOpen, isAuthenticated] );
+   },[lot_id,user, Lot.user, soloModalOpen, duoModalOpen, isAuthenticated] );
 
   return (
     <div>
@@ -78,10 +78,21 @@ const LotDetails = () => {
                     {
                       user.role==="farmer" &&
                       <div>
-                        <div className='d-flex flex-row justify-content-around'>
-                          <Button variant="success" onClick={()=>setModalOpen(true)}>Make Bid</Button>
-                          <AddBidModal isAuthenticated={isAuthenticated} modalOpen={modalOpen} setModalOpen={setModalOpen} lotId={lot_id}/>
+                          { user.bids[lot_id]===undefined ?
+                        <div className='d-flex flex-row'>
+
+                          { user.friends && <>
+                            <Button variant="success" onClick={()=>setDuoModalOpen(true)}>Bid with Partner</Button>
+                            <AddDuoBidModal modalOpen={duoModalOpen} setModalOpen={setDuoModalOpen} lotId={lot_id} quantity={Lot.quantity}/>
+                            </>}
+                          <Button className='ms-auto' variant="success" onClick={()=>setSoloModalOpen(true)}>Make Solo Bid</Button>
+                          <AddBidModal isAuthenticated={isAuthenticated} modalOpen={soloModalOpen} setModalOpen={setSoloModalOpen} lotId={lot_id}/>
                         </div>
+                        :
+                        <div className='text-center bg-info fs-5'>
+                          Your Bid is listed
+                        </div>
+                          }
                       </div>
                     }
                   </Card.Body>
