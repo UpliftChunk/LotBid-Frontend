@@ -108,7 +108,8 @@ const BidRequests = () => {
                   {
                       reqCount>0 && 
                       Object.entries(User?.bidRequests.received).map((BidObj)=>
-                      <EachBidRequest BidObj={BidObj} key={BidObj[0]} User={User} setUser={setUser} setBidsCount={setBidsCount} setReqCount={setReqCount}/>
+                      <div key={BidObj[0]}>
+                      <EachBidRequest BidObj={BidObj} User={User} setUser={setUser} setBidsCount={setBidsCount} setReqCount={setReqCount}/></div>
                       )
                   }
                   
@@ -136,10 +137,10 @@ const BidRequests = () => {
                       {
                         let lotid = bidObj[0];
                         let bid   = bidObj[1];
-                        console.log(lotid);
                         return(
                         <Link
                           to={`/lot/${lotid}`} 
+                          key={lotid}
                           style={{
                           width: '290px',
                           backgroundImage: `url(${greyjpg})`,

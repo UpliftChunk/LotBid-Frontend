@@ -35,7 +35,7 @@ const EachBidRequest = ({BidObj, User, setUser, setReqCount, setBidsCount}) => {
     console.log("here", modalOpen);
 
     useEffect(()=>{
-      console.log("here");
+      console.log("modalOpen useEffect", modalOpen);
     },[modalOpen])
      return(
      <div 
@@ -97,15 +97,15 @@ const EachBidRequest = ({BidObj, User, setUser, setReqCount, setBidsCount}) => {
                    <Col style={{height:'100%'}} className='btn fw-bold p-0 bg-success'
                        onClick={()=>(setModalOpen(true))}>
                      Accept<IoMdCheckmark className='mb-1 fw-bold'/>
-                     
-       <AddBidModal isAuthenticated={true} modalOpen={modalOpen} setModalOpen={setModalOpen} lotId={lotid}/>
                    </Col>
                    <Col style={{height:'100%'}} className='btn fw-bold p-0 bg-danger'
                        onClick={()=>RejectRequest(lotid, bid.friendUser)}>
                      Reject<IoMdClose className='my-1 fw-bold'/>
                    </Col>
+                     <AddBidModal isAuthenticated={true} modalOpen={modalOpen} setModalOpen={setModalOpen} lotId={lotid}/>
                </Row>
-             </div>
+             </div>  
+                   
        </Row>
      </div>
      )
