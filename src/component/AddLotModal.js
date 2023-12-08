@@ -58,10 +58,15 @@ function AddLotModal({modalOpen, setModalOpen}) {
                       }
 
                       <label htmlFor="quantity">Quantity</label>
-                      <input type="number" className="form-control" id="quantity" placeholder="in quintals" {...register("quantity", {required: true})}/>             
+                      <input type="number" className="form-control" id="quantity" placeholder="in quintals" {...register("quantity", {required: true, validate: {
+                                  lessThanReq: v => parseInt(v) > 9
+                                }})}/>             
 
                       {errors.quantity?.type==="required" && 
                               <p className='text-danger'>*quantity is required</p>
+                      }
+                      {errors.quantity?.type==="lessThanReq" && 
+                              <p className='text-danger'>*quantity should be atleast 10 quintals</p>
                       }
 
                       <label htmlFor="description">Description</label>

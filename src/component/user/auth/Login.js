@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import {useForm} from 'react-hook-form';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import ForgotPassword from './ForgotPassword.js';
@@ -17,23 +17,28 @@ const Login = () => {
       handleSubmit,
       formState: {errors}
    } = useForm();
-  
+  let [Error, setError]= useState(null);
 
    let loginCurrentUser = (CurUser) => {
       // dispatch(login(CurUser.email, CurUser.password));
       async function postUser() {
-         
+         let data, err;
          const config = {headers: {'Content-Type': 'application/json'}};
-         const {data} = await axios.post( 
+         await axios.post( 
             `/api/v1/login`, 
             CurUser, 
             config
-         );
-
+         ).then((response)=> {console.log(response);data = response.data})
+         .catch(({response})=> {console.log(response);err = response.data.message} );
+         if(err){
+            setError(err);
+            return;
+         }
          console.log(data);
          if(data.user){
             localStorage.setItem(`user`, JSON.stringify(data.user));
             localStorage.setItem(`isAuthenticated`, JSON.stringify(true));
+            setError(null);
             setAuth(true);
          }  
       }
@@ -53,6 +58,11 @@ const Login = () => {
             {/* Login form */}
             <div className='p-2'>
                <div className='text-center display-5'>Login User</div>
+               {
+                  Error &&
+                  <div className='mb-3 text-danger fs-5 text-center fw-bold text-decoration-underline font-monospace'
+                     style={{textShadow:'1px 0 10px crimson'}}>{Error}</div>
+               }
                
                {/* responsive form */}
             <div className='row'>

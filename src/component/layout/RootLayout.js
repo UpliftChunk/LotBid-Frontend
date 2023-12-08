@@ -32,7 +32,7 @@ function RootLayout() {
             {/* dynamic content */}
             <div className='d-flex' style={{flexGrow:"1"}}>
               <div className='w-100 m-auto'>
-                <Outlet context={{isAuthenticated, user, setAuth}} />
+                <Outlet context={{isAuthenticated, setUser, user, setAuth}} />
               </div>
             </div>
 

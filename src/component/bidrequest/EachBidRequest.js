@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import AddBidModal from './AddBidModal';
 import ProfilePng from '../../images/Profile.png';
 import { IoMdClose } from "react-icons/io";
@@ -32,11 +32,6 @@ const EachBidRequest = ({BidObj, User, setUser, setReqCount, setBidsCount}) => {
         setBidsCount(Object.entries(data.user.bids).length);
       }
     }
-    console.log("here", modalOpen);
-
-    useEffect(()=>{
-      console.log("modalOpen useEffect", modalOpen);
-    },[modalOpen])
      return(
      <div 
        key={lotid} 
@@ -102,7 +97,7 @@ const EachBidRequest = ({BidObj, User, setUser, setReqCount, setBidsCount}) => {
                        onClick={()=>RejectRequest(lotid, bid.friendUser)}>
                      Reject<IoMdClose className='my-1 fw-bold'/>
                    </Col>
-                     <AddBidModal isAuthenticated={true} modalOpen={modalOpen} setModalOpen={setModalOpen} lotId={lotid}/>
+                  <AddBidModal friendid={bid.friendUser} modalOpen={modalOpen} setModalOpen={setModalOpen} lotId={lotid}/>
                </Row>
              </div>  
                    

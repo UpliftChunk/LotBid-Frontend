@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import {useForm} from 'react-hook-form';
 import {useNavigate, useOutletContext } from 'react-router-dom';
 
@@ -16,25 +16,36 @@ const Register = () => {
       formState: {errors}
    } = useForm();
   
-
+   const [loading, setLoading]= useState(true);
+   const [Error, setError] = useState(null);
    let addNewUser = (newUser) => {
+      setLoading(true);
       async function postUser() {
          newUser.avatar =await newUser.avatar[0];
          console.log(newUser);
          
+         let data, err;
          const config = {headers: {'Content-Type': 'multipart/form-data'}};
-         const {data} = await axios.post( 
+         await axios.post( 
             `/api/v1/register`, 
             newUser, 
             config
-         );
+         ).then((response)=> data= response.data)
+         .catch(({response})=> err= response.data.message);
 
+         if(err){
+            setError(err);
+            setLoading(false);
+            return;
+         }
          console.log(data);
          if(data.user){
             localStorage.setItem(`user`, JSON.stringify(data.user));
             localStorage.setItem(`isAuthenticated`, JSON.stringify(true));
+            setError(null);
             setAuth(true);
          }  
+         setLoading(false);
       }
 
       postUser();
@@ -44,11 +55,22 @@ const Register = () => {
    useEffect(()=>{
       if(isAuthenticated) 
          navigate(`/`);
+      setLoading(false);
    }, [navigate, isAuthenticated]);
 
   return (
     <div>
-            <div>
+            {
+               loading && <div className='mt-5 d-flex display-2 justify-content-center'>
+                  Loading...
+               </div>
+            }
+            {
+               Error &&
+               <div className='mb-3 text-danger fs-5 text-center fw-bold text-decoration-underline font-monospace'
+                  style={{textShadow:'1px 0 10px crimson'}}>{Error}</div>
+            }
+            {!loading && <div>
                {/* Register form */}
                <div className='p-2'>
                   <div className='text-center display-5'>Register User</div>
@@ -148,7 +170,7 @@ const Register = () => {
                </div>
          
                </div>
-            </div>
+            </div>}
       
     </div>
   )

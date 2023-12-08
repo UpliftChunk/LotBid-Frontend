@@ -48,8 +48,6 @@ const BidRequests = () => {
 
   console.log(User);
 
-  
-
   useEffect(() =>{
     const func= async()=>{
       if(localStorage.getItem('user')) {

@@ -16,7 +16,7 @@ const SearchBar = ({User, setUser}) => {
    const [searchText, setSearchText] = useState('');
    const [searchedUser, setSearchedUser] = useState(null);
    const [cardsDesgin, setCardsDesgin] = useState([1,2,3,4]);
-   // const [error, setError] = useState(null);
+   const [Error, setError] = useState(null);
 
    const backgroundImage= [
       tangjpg, darkjpg, greyjpg, bluejpg
@@ -29,11 +29,24 @@ const SearchBar = ({User, setUser}) => {
    console.log(searchedUser);
    const Search = useCallback(async()=>{
       console.log('Searching...', searchText);
-      if(!searchText) return;
+      if(!searchText){
+         setError(null);
+         return;
+      } 
       let link=`/api/v1/users?name=${searchText}`
-      const {data} = await axios.get(link);
-
+      
+      let data, err;
+      await axios.get(link).then((response)=> data= response.data)
+      .catch(({response})=>{
+        err= response.data;
+        console.log('hi error', err);
+      })
+      if(err){
+         setError(err.message);
+         return;
+      } 
       setSearchedUser(data.user);
+      setError(null);
       let i=[];
       await data.user.map((user, key)=> i.push(randomColor(key+1)));
       console.log(i);
@@ -105,7 +118,13 @@ const SearchBar = ({User, setUser}) => {
 
       <div className='d-flex flex-wrap justify-content-center' style={{maxWidth:'60vw'}}>
          {
-            searchText && 
+            Error &&
+            <div 
+               className='mb-3 text-danger fs-5 text-center fw-bold text-decoration-underline font-monospace'
+               style={{textShadow:'1px 0 10px crimson'}}>{Error}</div>
+         }
+         {
+            searchText && !Error && 
             searchedUser?.map((user, key)=>
             {
                return(

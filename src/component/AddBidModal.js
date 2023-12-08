@@ -4,7 +4,7 @@ import Modal from 'react-bootstrap/Modal';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
-function AddBidModal({isAuthenticated, modalOpen, setModalOpen, lotId}) {
+function AddBidModal({isAuthenticated, modalOpen, setModalOpen, lotId, setError, setUser}) {
   console.log(modalOpen, lotId); 
   const handleClose = () => setModalOpen(false);
   const navigate = useNavigate();
@@ -23,12 +23,27 @@ function AddBidModal({isAuthenticated, modalOpen, setModalOpen, lotId}) {
     BidDetails.lotId= lotId;
     console.log(BidDetails);
     async function postBid() {
+      let data, err;
       const config = {headers: {'Content-Type': 'application/json'}};
       await axios.post( 
          `/api/v1/lot/bid`, 
          BidDetails, 
          config
-      );
+      ).then((response)=> data= response.data).catch(({response})=>{
+        err=(response.data.message)
+        console.log('hi error');
+      });
+      if(err){
+        setError(err);
+        reset();
+        setModalOpen(false);
+        return;
+      }
+      if(data.user){
+        localStorage.setItem(`user`, JSON.stringify(data.user));
+        setUser(data.user);
+      }
+      setError(null);
       console.log(BidDetails);
       reset();
       setModalOpen(false);

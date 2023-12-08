@@ -5,7 +5,7 @@ import Col from 'react-bootstrap/esm/Col';
 import Row from 'react-bootstrap/esm/Row';
 import { useForm } from 'react-hook-form';
 
-function AddDuoBidModal({modalOpen, setModalOpen, lotId, quantity}) {
+function AddDuoBidModal({modalOpen, setModalOpen, lotId, quantity, setError}) {
   // console.log(modalOpen, lotId); 
   const handleClose = () => setModalOpen(false);
   const [User, setUser] = useState({});
@@ -26,11 +26,21 @@ function AddDuoBidModal({modalOpen, setModalOpen, lotId, quantity}) {
     console.log(BidDetails);
     async function postPartnerBid() {
       const config = {headers: {'Content-Type': 'application/json'}};
-      const {data} = await axios.post( 
+      let data, err;
+      await axios.post( 
          `/api/v1/users/addbidrequest`, 
          BidDetails, 
          config
-      );
+      ).then(({response})=> data = response.data).catch(({response})=>{
+        err = response.data.message;
+      });
+      if(err){
+        setError(err);
+        setModalOpen(false);
+        setInert(true);
+        return;
+      }
+      setError(null);
       if(data.user){
         localStorage.setItem(`user`, JSON.stringify(data.user));
         setUser(data.user);

@@ -2,12 +2,10 @@ import axios from 'axios';
 import React from 'react'
 import Modal from 'react-bootstrap/Modal';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 
-function AddBidModal({isAuthenticated, modalOpen, setModalOpen, lotId}) {
+function AddBidModal({modalOpen, setModalOpen, lotId, friendid}) {
   console.log(modalOpen, lotId); 
   const handleClose = () => setModalOpen(false);
-  const navigate = useNavigate();
   let {
     register,
     handleSubmit,
@@ -17,23 +15,20 @@ function AddBidModal({isAuthenticated, modalOpen, setModalOpen, lotId}) {
 
 
   let addBid = (BidDetails) =>{
-    if(!isAuthenticated)
-      return navigate('/account/login?message:Please_Login_to_Bid_a_Lot');
 
-    BidDetails.lotId= lotId;
+    BidDetails.lotID= lotId;
+    BidDetails.friendid= friendid;
     console.log(BidDetails);
     async function postBid() {
       const config = {headers: {'Content-Type': 'application/json'}};
       await axios.post( 
-         `/api/v1/lot/bid`, 
+         `/api/v1/lot/Acceptbidrequest`, 
          BidDetails, 
          config
       );
-      console.log(BidDetails);
+      setModalOpen(false);
       reset();
-      modalOpen.value = false;
     }
-
     postBid();
   }
 
