@@ -14,6 +14,7 @@ const EachBidRequest = ({BidObj, User, setUser, setReqCount, setBidsCount}) => {
      let lotid= BidObj[0];
      let bid= BidObj[1];
      let [modalOpen, setModalOpen] = useState(false);
+
      const RejectRequest= async(lotID, friendid)=>{
     
       const config = {headers: {'Content-Type': 'application/json'}};
@@ -97,7 +98,7 @@ const EachBidRequest = ({BidObj, User, setUser, setReqCount, setBidsCount}) => {
                        onClick={()=>RejectRequest(lotid, bid.friendUser)}>
                      Reject<IoMdClose className='my-1 fw-bold'/>
                    </Col>
-                  <AddBidModal friendid={bid.friendUser} modalOpen={modalOpen} setModalOpen={setModalOpen} lotId={lotid}/>
+                  <AddBidModal friendid={bid.friendUser} modalOpen={modalOpen} setModalOpen={setModalOpen} lotId={lotid} setUser={setUser}/>
                </Row>
              </div>  
                    

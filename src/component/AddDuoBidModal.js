@@ -25,13 +25,15 @@ function AddDuoBidModal({modalOpen, setModalOpen, lotId, quantity, setError}) {
     BidDetails.totalQuantity= quantity;
     console.log(BidDetails);
     async function postPartnerBid() {
-      const config = {headers: {'Content-Type': 'application/json'}};
       let data, err;
+      const config = {headers: {'Content-Type': 'application/json'}};
       await axios.post( 
          `/api/v1/users/addbidrequest`, 
          BidDetails, 
          config
-      ).then(({response})=> data = response.data).catch(({response})=>{
+      ).then((response)=> {data = response.data})
+      .catch(({response})=>{
+        // console.log(response);
         err = response.data.message;
       });
       if(err){
@@ -41,7 +43,7 @@ function AddDuoBidModal({modalOpen, setModalOpen, lotId, quantity, setError}) {
         return;
       }
       setError(null);
-      if(data.user){
+      if(data?.user){
         localStorage.setItem(`user`, JSON.stringify(data.user));
         setUser(data.user);
       }
@@ -55,15 +57,7 @@ function AddDuoBidModal({modalOpen, setModalOpen, lotId, quantity, setError}) {
   
   const cancelBidRequest = () =>{
     async function cancelPartnerBid() {
-      const config = {headers: {'Content-Type': 'application/json'}};
-      const {data} = await axios.post( 
-         `/api/v1/users/rejectbidrequest`, 
-         {
-          friendid: User.bidRequests?.sent?.[lotId].friendUser,
-          lotID: lotId
-         }, 
-         config
-      );
+      const {data} = await axios.get(`/api/v1/users/cancelbidrequest/${lotId}`);
       console.log(data);
       if(data.user){
         localStorage.setItem(`user`, JSON.stringify(data.user));
@@ -102,7 +96,7 @@ function AddDuoBidModal({modalOpen, setModalOpen, lotId, quantity, setError}) {
    return (
         <Modal show={modalOpen} onHide={handleClose}>
               <Modal.Body className="modal-body">
-                <Modal.Header  className="card-title heading fw-bold fs-6 lh-sm">Make a Partnership Bid request</Modal.Header>
+                <Modal.Header className="card-title heading fw-bold fs-6 lh-sm">Make a Partnership Bid request</Modal.Header>
                 <hr className="m-0" />
                 {/* list */}
                 <Modal.Body className="fs-5">
@@ -121,7 +115,7 @@ function AddDuoBidModal({modalOpen, setModalOpen, lotId, quantity, setError}) {
                               )
                             })
                           } 
-                      </select>
+                      </select> 
 
                      <div className='text-center fs-4'>My Contribution</div>
                      <hr className='m-0'/>

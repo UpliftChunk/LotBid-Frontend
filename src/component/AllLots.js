@@ -17,7 +17,7 @@ const AllLots = () => {
     // make http get request
     // write side effect only in use effect
     let link;
-    if(user.role==="farmer") link ="/api/v1/lots";
+    if(user.role==="farmer") link ="/api/v1/lots/open";
     else link ="/api/v1/customer/lots";
     
     console.log(link);
@@ -46,7 +46,7 @@ const AllLots = () => {
           {
             user.role==="customer" &&
             <div className='d-flex'>
-              <Button className='fs-4 p-0 m-auto' onClick={()=>setModalOpen(true)}>Add Lot</Button>
+              <Button className='fs-4 m-auto' onClick={()=>setModalOpen(true)}>Add Lot</Button>
               <AddLotModal modalOpen={modalOpen} setModalOpen={setModalOpen} />
             </div>
           }

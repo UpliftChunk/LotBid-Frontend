@@ -3,7 +3,7 @@ import React from 'react'
 import Modal from 'react-bootstrap/Modal';
 import { useForm } from 'react-hook-form';
 
-function AddBidModal({modalOpen, setModalOpen, lotId, friendid}) {
+function AddBidModal({modalOpen, setModalOpen, lotId, friendid, setUser}) {
   console.log(modalOpen, lotId); 
   const handleClose = () => setModalOpen(false);
   let {
@@ -21,11 +21,17 @@ function AddBidModal({modalOpen, setModalOpen, lotId, friendid}) {
     console.log(BidDetails);
     async function postBid() {
       const config = {headers: {'Content-Type': 'application/json'}};
+      let data;
       await axios.post( 
          `/api/v1/lot/Acceptbidrequest`, 
          BidDetails, 
          config
-      );
+      ).then((response) => data= response.data)
+      .catch((err)=> console.log("heres an error: ", err));
+      if(data?.user){
+        localStorage.setItem(`user`, JSON.stringify(data.user));
+        setUser(data.user);
+      }
       setModalOpen(false);
       reset();
     }

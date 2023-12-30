@@ -1,133 +1,82 @@
 import React from "react";
-import { useRef } from "react";
-// import emailjs from "@emailjs/browser";
 import "./styles.css";
-import { GrSecure } from "react-icons/gr";
-import { usePaymentInputs } from "react-payment-inputs";
-
-export default function Form() {
-  const form = useRef();
-  const {
-    meta,
-    getExpiryDateProps,
-    getCVCProps
-  } = usePaymentInputs();
-
-  const [checked, setChecked] = React.useState(true);
-  const [cardNumber, setCardNumber] = React.useState("");
-  const [details, setDetails] = React.useState({
-    expiryDate: "",
-    cvc: "",
-    NomDuClient: ""
-  });
-
-  const handleChange = (e) => {
-    setDetails((prevFormDetails) => {
-      return {
-        ...prevFormDetails,
-        [e.target.name]: e.target.value
-      };
-    });
-
-    console.log(details);
-  };
-  const handleChangeCardNumber = (e) => {
-    setCardNumber(
-      e.target.value
-        .replace(/[^\dA-Z]/g, "")
-        .replace(/(.{4})/g, "$1 ")
-        .trim()
-    );
-  };
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (
-      (meta.isTouched && meta.error) ||
-      Number(cardNumber.length) < 19 ||
-      cardNumber.trim().length === 0 ||
-      details.expiryDate.trim().length === 0 ||
-      details.cvc.trim().length === 0 ||
-      details.NomDuClient.trim().length === 0 ||
-      checked === true
-    ) {
-      setChecked(true);
-      console.log("not submit");
-    } else {
-      setChecked(false);
+import Modal from "react-bootstrap/esm/Modal";
+import axios from "axios";
+// This is a reference code
+export default function MakePayment({price, lotId, users, modalOpen, setModalOpen, setUser}) {
+  console.log(price, lotId, users, modalOpen);
+  const payment = ()=>{
+    async function makeDeal(){
+      const config = {headers: {'Content-Type': 'application/json'}};
+      const {data}= await axios.post(
+        `/api/v1/customer/lot/payment`,
+        {price, lotID: lotId, users},
+        config
+      );
+      alert('Payment successful'); 
+      console.log(data);
+      if(data.customer){
+        localStorage.setItem('user', JSON.stringify(data.customer));
+        setUser(data.customer);
+      }
     }
-  };
-  const handleCheck = () => {
-    console.log("ok");
-
-    setChecked(false);
-  };
+    makeDeal();
+  }
 
   return (
-    <form ref={form} className="form" onSubmit={handleSubmit}>
-      <header>
-        <div className="TitleSecure">
-          <h3>Payment Details </h3>
-          <GrSecure className="secureIcon" />
-        </div>
-        <div className="Amont">
-          <p> Amount : </p>
-          <label className="price">100/-</label>
-        </div>
-      </header>
-      <main>
-        {meta.isTouched && meta.error ? (
-          <span className="span">Error: {meta.error}</span>
-        ) : (
-          <span className="span"></span>
-        )}
-        <div className="NomDuClient">
-          <label> Name of the Client </label>
-          <input name="NomDuClient" onChange={handleChange} />
-        </div>
-        <div className="NumDeCarte">
-          <label> Card Number </label>
-          <input
-            // {...getCardNumberProps({ onChange: handleChangeCardNumber })}
-            onChange={handleChangeCardNumber}
-            placeholder="Valid Card Number"
-            name="cardNumber"
-            maxLength="19"
-            value={cardNumber}
-          />
-        </div>
-        <div className="DateEtCvc">
-          <div className="Date">
-            <label> Date expiration </label>
-            <input
-              {...getExpiryDateProps({ onChange: handleChange })}
-              placeholder="MM/AA"
-              name="expiryDate"
+    <Modal id="payment" show={modalOpen}>
+      <form id="form" >
+        <header id="header">
+          <div id="TitleSecure">
+            <h3>Payment Details </h3>
+          </div>
+          <div id="Amont">
+            <p> Amount : </p>
+            <label id="price">{price}/- only</label>
+          </div>
+        </header>
+        <main id="main">
+          <div id="ClientName">
+            <label> Name of the Client </label>
+            <input id='input' name="ClientName" />
+          </div>
+          <div id="CardNumber">
+            <label> Card Number </label>
+            <input id='input'
+              placeholder="Valid Card Number"
+              name="cardNumber"
+              maxLength="19"
             />
           </div>
-          <div className="CvC">
-            <label> Cvv</label>
-            <input
-              {...getCVCProps({ onChange: handleChange })}
-              name="cvc"
-              maxLength="3"
-            />
+          <div id="DateEtCvc">
+            <div id="Date">
+              <label>Expiration Date</label>
+              <input id='input'
+                placeholder="MM/YY"
+                name="expiryDate"
+              />
+            </div>
+            <div id="CvC">
+              <label> Cvv</label>
+              <input id='input'
+                name="cvc"
+                maxLength="3"
+              />
+            </div>
           </div>
-        </div>
-        <div className="terme">
-          <input type="checkbox" onChange={handleCheck} />
-          <p className="TermeConfidentialite">
-            Accept terms and conditions
-          </p>
-        </div>
-        <input
-          disabled={checked}
-          type="submit"
-          value="Validate"
-          className="btn"
-        />
-      </main>
-      <footer>
-      </footer>
-    </form>
+          <div id="terme" >
+            <input id='input' className="my-3" type="checkbox"/>
+            <p id="termsConditions" className="mb-2">
+              Accept terms and conditions
+            </p>
+          </div>
+          <button
+            type="submit"
+            className="btn btn-success"
+            onClick={payment}
+          >Proceed</button>
+        </main>
+      </form>
+    </Modal>
   );
 }

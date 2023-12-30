@@ -5,12 +5,11 @@ import RootLayout from './component/layout/RootLayout';
 import AllLots from './component/AllLots';
 import FriendRequests from './component/friendrequest/FriendRequests';
 import BidRequests from './component/bidrequest/BidRequests';
-import DealRequests from './component/DealRequests';
+import Deals from './component/DealRequests';
 import LotDetails from './component/LotDetails';
 import LoginRegister from './component/user/auth/LoginRegister';
 import Login from './component/user/auth/Login';
 import Register from './component/user/auth/Register';
-import MakePayment from './component/payment/MakePayment';
 
 function App() {
   const Router = createBrowserRouter([
@@ -40,11 +39,7 @@ function App() {
         },
         {
           path : 'deals',
-          element : <DealRequests/>
-        },
-        {
-          path : 'payment',
-          element : <MakePayment/>
+          element : <Deals/>
         },
         {
           path : 'account',

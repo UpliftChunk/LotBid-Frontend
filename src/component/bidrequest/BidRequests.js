@@ -48,6 +48,12 @@ const BidRequests = () => {
 
   console.log(User);
 
+  useEffect(()=>{
+    if(!User) return;
+    setBidsCount(Object.entries(User?.bids).length);
+    setReqCount(Object.entries(User?.bidRequests.received).length);
+  }, [User]);
+
   useEffect(() =>{
     const func= async()=>{
       if(localStorage.getItem('user')) {
