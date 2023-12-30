@@ -52,6 +52,7 @@ function AddLotModal({modalOpen, setModalOpen}) {
                         <option>Carrot</option>
                         <option>BeetRoot</option>
                         <option>Mango</option>
+                        <option>Orange</option>
                       </select>
                       {errors.vegi_name?.type==="required" && 
                               <p className='text-danger'>*vegitable variety is required</p>

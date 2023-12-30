@@ -138,10 +138,10 @@ const LotDetails = () => {
                             { user.bids?.[lot_id]===undefined ?
                           <div className='d-flex flex-row'>
 
-                            { (user?.friends)!==undefined && <>
+                            {user && <div>{Object.entries(user?.friends)?.[0] && <>
                               <Button  variant="success" onClick={()=>setDuoModalOpen(true)}>Bid with Partner</Button>
                               <AddDuoBidModal modalOpen={duoModalOpen} setModalOpen={setDuoModalOpen} lotId={lot_id} quantity={Lot.quantity} setError={setError} setUser={setUser}/>
-                              </>}
+                              </>}</div>}
                             <Button className='ms-auto' variant="success" onClick={()=>setSoloModalOpen(true)}>Make Solo Bid</Button>
                             <AddBidModal isAuthenticated={isAuthenticated} modalOpen={soloModalOpen} setModalOpen={setSoloModalOpen} lotId={lot_id} setError={setError} setUser={setUser}/>
                           </div>

@@ -15,7 +15,7 @@ function RootLayout() {
       setLoading(false);
     }
     else {
-      setUser({role: 'farmer'});
+      setUser({role: 'farmer', friends: {}});
       setLoading(false);
     }
   },[isAuthenticated])
